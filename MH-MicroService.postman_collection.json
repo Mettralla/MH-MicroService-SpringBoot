@@ -30,6 +30,27 @@
 					"response": []
 				},
 				{
+					"name": "SHOW USER BY ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/users/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "GET ALL ROLES",
 					"request": {
 						"method": "GET",
@@ -78,6 +99,36 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "UPDATE USER",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"nuevoUsuarioEditado\",\r\n  \"email\": \"nuevoUsuarioEditado@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/users/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"users",
+								"3"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -99,6 +150,27 @@
 							"path": [
 								"api",
 								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SHOW PRODUCT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/products/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"products",
+								"1"
 							]
 						}
 					},
@@ -148,7 +220,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/products/4",
+							"raw": "http://localhost:8082/api/products/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -157,7 +229,35 @@
 							"path": [
 								"api",
 								"products",
-								"4"
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PRODUCTS STOCK",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/products/1/stock?stock=50",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"products",
+								"1",
+								"stock"
+							],
+							"query": [
+								{
+									"key": "stock",
+									"value": "50"
+								}
 							]
 						}
 					},
@@ -189,13 +289,55 @@
 					"response": []
 				},
 				{
+					"name": "SHOW ORDER",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/orders/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"orders",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE ORDER",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/orders/3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"orders",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "CREATE ORDERS",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"userId\": 12,\r\n  \"status\": \"PENDING\"\r\n}",
+							"raw": "{\r\n  \"userId\": 2,\r\n  \"status\": \"PENDING\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -224,7 +366,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"productId\": 12,\r\n  \"quantity\": 200\r\n}",
+							"raw": "{\r\n  \"productId\": 1,\r\n  \"quantity\": 10\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

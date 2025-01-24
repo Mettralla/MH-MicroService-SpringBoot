@@ -10,4 +10,6 @@ public interface ProductService {
     List<ProductDTO> getAllProducts();
     ProductDTO createProduct(NewProduct newProductData);
     ProductDTO updateProduct(NewProduct updateProductData, Long id) throws ProductNotFoundException;
+    ProductDTO showProduct(Long id) throws ProductNotFoundException;
+    ProductDTO updateProductStock(Long id, int newStock) throws ProductNotFoundException;
 }

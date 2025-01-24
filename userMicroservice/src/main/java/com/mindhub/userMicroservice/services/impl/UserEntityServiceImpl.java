@@ -1,8 +1,10 @@
 package com.mindhub.userMicroservice.services.impl;
 
+import com.mindhub.userMicroservice.dtos.EditUserEntity;
 import com.mindhub.userMicroservice.dtos.NewUserEntity;
 import com.mindhub.userMicroservice.dtos.UserEntityDTO;
 import com.mindhub.userMicroservice.exceptions.EmailAlreadyExistsException;
+import com.mindhub.userMicroservice.exceptions.UserEntityNotFoundException;
 import com.mindhub.userMicroservice.models.RolType;
 import com.mindhub.userMicroservice.models.UserEntity;
 import com.mindhub.userMicroservice.repositories.UserEntityRepository;
@@ -50,4 +52,24 @@ public class UserEntityServiceImpl implements UserEntityService {
         UserEntity createdUserEntity = userEntityRepository.save(userEntity);
         return new UserEntityDTO(createdUserEntity);
     }
+
+    @Override
+    public UserEntityDTO showUserEntity(Long id) throws UserEntityNotFoundException {
+        UserEntity userEntity = userEntityRepository.findById(id).orElseThrow( () ->
+                new UserEntityNotFoundException("User Not Found"));
+        return new UserEntityDTO(userEntity);
+    }
+
+    @Override
+    public UserEntityDTO updateUserEntity(Long id, EditUserEntity updatedUserData) throws UserEntityNotFoundException {
+        UserEntity userEntity = userEntityRepository.findById(id).orElseThrow(() ->
+                new UserEntityNotFoundException("User with ID " + id + " not found"));
+
+        userEntity.setUsername(updatedUserData.username());
+        userEntity.setEmail(updatedUserData.email());
+
+        UserEntity updatedUserEntity = userEntityRepository.save(userEntity);
+        return new UserEntityDTO(updatedUserEntity);
+    }
+
 }

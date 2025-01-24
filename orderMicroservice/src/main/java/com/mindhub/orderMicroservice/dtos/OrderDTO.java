@@ -9,18 +9,16 @@ import java.util.List;
 
 public class OrderDTO {
     private Long id;
-    private Long userId;
+
+    private UserEntityData user;
     private List<OrderItemDTO> products;
     private Status status;
 
-    public OrderDTO(OrderEntity order) {
+    public OrderDTO(OrderEntity order, UserEntityData userEntityData, List<OrderItemDTO> productsList) {
         id = order.getId();
-        userId = order.getUserId();
+        user = userEntityData;
         status = order.getStatus();
-        products = order.getProducts()
-                        .stream()
-                        .map( product -> new OrderItemDTO(product) )
-                        .toList();
+        products = productsList;
     }
 
     public OrderDTO() {}
@@ -29,8 +27,8 @@ public class OrderDTO {
         return id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public UserEntityData getUser() {
+        return user;
     }
 
     public List<OrderItemDTO> getProducts() {
@@ -45,7 +43,7 @@ public class OrderDTO {
     public String toString() {
         return "OrderDTO{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", user=" + user +
                 ", products=" + products +
                 ", status=" + status +
                 '}';

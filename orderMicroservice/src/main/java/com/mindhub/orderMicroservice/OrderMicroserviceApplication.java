@@ -24,8 +24,8 @@ public class OrderMicroserviceApplication {
 			OrderEntity order2 = new OrderEntity(2L, Status.COMPLETED);
 			OrderEntity order3 = new OrderEntity(3L, Status.PENDING);
 
-			OrderItem orderItem1 = new OrderItem(18L, 300);
-			OrderItem orderItem2 = new OrderItem(25L, 100);
+			OrderItem orderItem1 = new OrderItem(2L, 300);
+			OrderItem orderItem2 = new OrderItem(3L, 100);
 
 			orderRepository.save(order1);
 			orderRepository.save(order2);

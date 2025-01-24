@@ -13,15 +13,27 @@ import java.util.Map;
 @ControllerAdvice
 public class ExceptionHandlers {
     @ExceptionHandler(InsufficientStockException.class)
-    public ResponseEntity<String> userEntityNotFoundExceptionHandler(
+    public ResponseEntity<String> insufficientStockExceptionHandler(
             InsufficientStockException insufficientStockException) {
         return new ResponseEntity<>(insufficientStockException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> productNotFoundExceptionHandler(
+            ProductNotFoundException productNotFoundException) {
+        return new ResponseEntity<>(productNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(OrderNotFoundException.class)
     public ResponseEntity<String> orderNotFoundExceptionHandler(
             OrderNotFoundException orderNotFoundException) {
         return new ResponseEntity<>(orderNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UserEntityNotFoundException.class)
+    public ResponseEntity<String> userEntityNotFoundExceptionHandler(
+            UserEntityNotFoundException userEntityNotFoundException) {
+        return new ResponseEntity<>(userEntityNotFoundException.getMessage(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

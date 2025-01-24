@@ -2,27 +2,30 @@ package com.mindhub.orderMicroservice.dtos;
 
 import com.mindhub.orderMicroservice.models.OrderItem;
 
+import java.util.List;
+
 public class OrderItemDTO {
 
     private Long id;
 
-    private Long productId;
+    private ProductEntityData product;
     private Integer quantity;
 
-    public OrderItemDTO(OrderItem orderItem) {
+    public OrderItemDTO(OrderItem orderItem, ProductEntityData productData) {
         id = orderItem.getId();
-        productId = orderItem.getProductId();
+        product = productData;
         quantity = orderItem.getQuantity();
     }
 
-    public OrderItemDTO() {}
+    public OrderItemDTO() {
+    }
+
+    public ProductEntityData getProduct() {
+        return product;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public Long getProductId() {
-        return productId;
     }
 
     public Integer getQuantity() {
@@ -33,7 +36,7 @@ public class OrderItemDTO {
     public String toString() {
         return "OrderItemDTO{" +
                 "id=" + id +
-                ", productId=" + productId +
+                ", product=" + product +
                 ", quantity=" + quantity +
                 '}';
     }

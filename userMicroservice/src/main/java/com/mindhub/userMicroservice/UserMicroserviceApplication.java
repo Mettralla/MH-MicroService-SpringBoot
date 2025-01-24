@@ -29,8 +29,16 @@ public class UserMicroserviceApplication {
 					"jane.smith@example.com"
 			);
 
+			UserEntity testUser3 = new UserEntity(
+					"johnDoe",
+					"securepassword",
+					"johnDoe@example.com"
+			);
+
+
 			userEntityRepository.save(testUser);
 			userEntityRepository.save(testUser2);
+			userEntityRepository.save(testUser3);
 		};
 	}
 

@@ -51,4 +51,23 @@ public class ProductServiceImpl implements ProductService {
         Product postUpdateProduct = productRepository.save(preUpdateProduct);
         return new ProductDTO(postUpdateProduct);
     }
+
+    @Override
+    public ProductDTO showProduct(Long id) throws ProductNotFoundException {
+        Product productEntity = productRepository.findById(id).orElseThrow( () ->
+                new ProductNotFoundException("Product Not Found"));
+        return new ProductDTO(productEntity);
+    }
+
+    @Override
+    public ProductDTO updateProductStock(Long id, int newStock) throws ProductNotFoundException {
+        Product productToUpdate = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product with ID " + id + " not found"));
+
+        productToUpdate.setStock(newStock);
+
+        Product updatedProduct = productRepository.save(productToUpdate);
+
+        return new ProductDTO(updatedProduct);
+    }
 }
