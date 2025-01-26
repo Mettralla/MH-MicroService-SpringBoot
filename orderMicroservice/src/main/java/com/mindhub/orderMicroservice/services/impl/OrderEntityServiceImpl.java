@@ -184,8 +184,8 @@ public class OrderEntityServiceImpl implements OrderEntityService {
             String roles = (String) responseDataMap.get("roles");
 
             return new UserEntityData(id, username, email, roles);
-        } catch (HttpClientErrorException.NotFound e) {
-            throw new UserEntityNotFoundException("User with ID " + userId + " not found");
+//        } catch (HttpClientErrorException.NotFound e) {
+//            throw new UserEntityNotFoundException("User with ID " + userId + " not found");
 
         } catch (Exception e) {
             throw new RuntimeException("Unexpected error connecting to UserService");

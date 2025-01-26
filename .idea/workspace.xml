@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="13f32538-55ef-43f0-ac0b-d424821e46f2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/apiGateway/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/src/main/java/com/mindhub/apiGateway/ApiGatewayApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/src/main/java/com/mindhub/apiGateway/config/GatewayConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/src/main/java/com/mindhub/apiGateway/controllers/FallbackController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apiGateway/src/test/java/com/mindhub/apiGateway/ApiGatewayApplicationTests.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/.gitattributes" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/mvnw" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/mvnw.cmd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/src/main/java/com/mindhub/eurekaServer/EurekaServerApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/src/main/resources/application.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/eurekaServer/src/test/java/com/mindhub/eurekaServer/EurekaServerApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/orderMicroservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/orderMicroservice/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/orderMicroservice/src/main/java/com/mindhub/orderMicroservice/services/impl/OrderEntityServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/orderMicroservice/src/main/java/com/mindhub/orderMicroservice/services/impl/OrderEntityServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/orderMicroservice/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/orderMicroservice/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productMicroservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/productMicroservice/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productMicroservice/src/main/java/com/mindhub/productMicroservice/exceptions/ExceptionHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/productMicroservice/src/main/java/com/mindhub/productMicroservice/exceptions/ExceptionHandlers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/productMicroservice/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/productMicroservice/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userMicroservice/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/userMicroservice/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userMicroservice/src/main/java/com/mindhub/userMicroservice/exceptions/ExceptionHandlers.java" beforeDir="false" afterPath="$PROJECT_DIR$/userMicroservice/src/main/java/com/mindhub/userMicroservice/exceptions/ExceptionHandlers.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/userMicroservice/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/userMicroservice/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 0
+}]]></component>
+  <component name="ProjectId" id="2s9GSPJD6KOaFR6kMHcJzI5YEUy" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showVisibilityIcons" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "microservices-resttemplate",
+    "kotlin-language-version-configured": "true"
+  }
+}]]></component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="13f32538-55ef-43f0-ac0b-d424821e46f2" name="Changes" comment="" />
+      <created>1737860376590</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1737860376590</updated>
+    </task>
+    <servers />
+  </component>
+</project>
