@@ -2,10 +2,12 @@ package com.mindhub.productMicroservice.services.impl;
 
 import com.mindhub.productMicroservice.dtos.NewProduct;
 import com.mindhub.productMicroservice.dtos.ProductDTO;
+import com.mindhub.productMicroservice.events.ProductUpdatedEvent;
 import com.mindhub.productMicroservice.exceptions.ProductNotFoundException;
 import com.mindhub.productMicroservice.models.Product;
 import com.mindhub.productMicroservice.repositories.ProductRepository;
 import com.mindhub.productMicroservice.services.ProductService;
+import com.mindhub.productMicroservice.services.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     @Override
     public List<ProductDTO> getAllProducts() {
@@ -67,6 +72,14 @@ public class ProductServiceImpl implements ProductService {
         productToUpdate.setStock(newStock);
 
         Product updatedProduct = productRepository.save(productToUpdate);
+
+        ProductUpdatedEvent event = new ProductUpdatedEvent(
+                updatedProduct.getId(),
+                updatedProduct.getName(),
+                updatedProduct.getStock(),
+                updatedProduct.getPrice()
+        );
+        rabbitMQProducer.sendProductUpdatedEvent(event);
 
         return new ProductDTO(updatedProduct);
     }
