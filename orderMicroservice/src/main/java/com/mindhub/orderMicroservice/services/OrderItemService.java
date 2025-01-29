@@ -1,5 +1,6 @@
 package com.mindhub.orderMicroservice.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mindhub.orderMicroservice.dtos.NewOrderItem;
 import com.mindhub.orderMicroservice.dtos.NewOrderStatus;
 import com.mindhub.orderMicroservice.dtos.OrderDTO;

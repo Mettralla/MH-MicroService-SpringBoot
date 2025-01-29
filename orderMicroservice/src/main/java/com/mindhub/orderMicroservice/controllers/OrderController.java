@@ -4,6 +4,7 @@ import com.mindhub.orderMicroservice.dtos.*;
 import com.mindhub.orderMicroservice.exceptions.OrderNotFoundException;
 import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
+import com.mindhub.orderMicroservice.services.RabbitMQProducer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -24,6 +25,9 @@ public class OrderController {
 
     @Autowired
     private OrderItemService orderItemService;
+
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     @GetMapping()
     @Operation(summary = "Get All Orders", description = "Retrieve all orders.")
@@ -94,6 +98,8 @@ public class OrderController {
     ) {
         try {
             OrderItemDTO createdOrderItem = orderItemService.createOrderItem(newOrderItemData, id);
+            OrderDTO orderWithItems = orderEntityService.showOrder(id);
+            rabbitMQProducer.sendOrder(orderWithItems);
             return new ResponseEntity<>(createdOrderItem, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

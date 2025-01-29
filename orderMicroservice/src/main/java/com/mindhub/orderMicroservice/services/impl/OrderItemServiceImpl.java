@@ -1,15 +1,19 @@
 package com.mindhub.orderMicroservice.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mindhub.orderMicroservice.config.RestTemplateConfig;
 import com.mindhub.orderMicroservice.dtos.*;
 import com.mindhub.orderMicroservice.exceptions.InsufficientStockException;
 import com.mindhub.orderMicroservice.exceptions.OrderNotFoundException;
 import com.mindhub.orderMicroservice.exceptions.ProductNotFoundException;
+import com.mindhub.orderMicroservice.exceptions.UserEntityNotFoundException;
 import com.mindhub.orderMicroservice.models.OrderEntity;
 import com.mindhub.orderMicroservice.models.OrderItem;
 import com.mindhub.orderMicroservice.repositories.OrderEntityRepository;
 import com.mindhub.orderMicroservice.repositories.OrderItemRepository;
+import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
+import com.mindhub.orderMicroservice.services.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;

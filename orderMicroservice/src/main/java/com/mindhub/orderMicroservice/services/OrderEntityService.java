@@ -1,5 +1,6 @@
 package com.mindhub.orderMicroservice.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.mindhub.orderMicroservice.dtos.NewOrder;
 import com.mindhub.orderMicroservice.dtos.NewOrderStatus;
 import com.mindhub.orderMicroservice.dtos.OrderDTO;
@@ -11,7 +12,7 @@ import com.mindhub.orderMicroservice.models.Status;
 import java.util.List;
 
 public interface OrderEntityService {
-    OrderDTO createOrder(NewOrder newOrderData) throws UserEntityNotFoundException;
+    OrderDTO createOrder(NewOrder newOrderData) throws UserEntityNotFoundException, JsonProcessingException;
     List<OrderDTO> getAllOrders() throws UserEntityNotFoundException;
     OrderDTO updateOrderStatus(Long orderId, NewOrderStatus newStatus) throws OrderNotFoundException, UserEntityNotFoundException;
     OrderDTO showOrder(Long orderId) throws OrderNotFoundException, UserEntityNotFoundException;

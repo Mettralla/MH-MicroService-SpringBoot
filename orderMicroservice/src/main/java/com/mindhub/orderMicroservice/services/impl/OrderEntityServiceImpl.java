@@ -1,5 +1,6 @@
 package com.mindhub.orderMicroservice.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.orderMicroservice.dtos.*;
 import com.mindhub.orderMicroservice.exceptions.InsufficientStockException;
@@ -10,6 +11,7 @@ import com.mindhub.orderMicroservice.models.Status;
 import com.mindhub.orderMicroservice.repositories.OrderEntityRepository;
 import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
+import com.mindhub.orderMicroservice.services.RabbitMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,9 @@ public class OrderEntityServiceImpl implements OrderEntityService {
 
     private RestTemplate restTemplate;
 
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
+
     @Value("${userservice.baseurl}")
     private String userServiceBaseUrl;
 
@@ -43,7 +48,7 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     public OrderItemService orderItemService;
 
     @Override
-    public OrderDTO createOrder(NewOrder newOrderData) throws UserEntityNotFoundException {
+    public OrderDTO createOrder(NewOrder newOrderData) throws UserEntityNotFoundException, JsonProcessingException {
         UserEntityData userEntityData = getUserEntityData(newOrderData.userId());
 
         OrderEntity newOrder = new OrderEntity(
@@ -67,7 +72,11 @@ public class OrderEntityServiceImpl implements OrderEntityService {
                 })
                 .toList();
 
-        return new OrderDTO(createdOrder, userEntityData, orderItemsDTO);
+        OrderDTO createdOrderDTO = new OrderDTO(createdOrder, userEntityData, orderItemsDTO);
+
+        rabbitMQProducer.sendOrder(createdOrderDTO);
+
+        return createdOrderDTO;
     }
 
     @Override

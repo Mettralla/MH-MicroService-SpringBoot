@@ -71,5 +71,4 @@ public class UserEntityServiceImpl implements UserEntityService {
         UserEntity updatedUserEntity = userEntityRepository.save(userEntity);
         return new UserEntityDTO(updatedUserEntity);
     }
-
 }
