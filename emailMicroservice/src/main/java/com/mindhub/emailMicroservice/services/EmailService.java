@@ -27,18 +27,15 @@ public class EmailService {
             helper.setSubject(userName + ", tu orden ha sido creada");
             helper.setText("Puedes echar un vistazo a tu orden en el archivo adjunto.");
 
-            // Convertir ByteArrayInputStream a byte[] para adjuntar el PDF
             byte[] pdfBytes = toByteArray(pdfContent);
 
             ByteArrayResource resource = new ByteArrayResource(pdfBytes);
 
-            // Adjuntar el PDF usando ByteArrayResource
             helper.addAttachment("order_confirmation.pdf", resource);
 
             mailSender.send(mimeMessage);
         } catch (Exception e) {
             e.printStackTrace();
-            // Manejar el error de envío de correo
         }
     }
 

@@ -23,7 +23,7 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(emailQueue).to(emailExchange).with("email.routingkey");
     }
 
-    //
+    // ORDER
 
     @Bean
     public TopicExchange orderExchange() {
@@ -38,5 +38,17 @@ public class RabbitMQConfig {
     @Bean
     public Binding orderBinding(Queue orderQueue, TopicExchange orderExchange) {
         return BindingBuilder.bind(orderQueue).to(orderExchange).with("order.routingkey");
+    }
+
+    // USER
+
+    @Bean
+    public Queue userQueue() {
+        return new Queue("user.queue");
+    }
+
+    @Bean
+    public Binding userBinding(Queue userQueue, TopicExchange emailExchange) {
+        return BindingBuilder.bind(userQueue).to(emailExchange).with("user.routingkey");
     }
 }

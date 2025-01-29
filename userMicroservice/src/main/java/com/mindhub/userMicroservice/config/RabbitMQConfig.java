@@ -40,4 +40,15 @@ public class RabbitMQConfig {
     public Binding emailBinding(Queue emailQueue, TopicExchange emailExchange) {
         return BindingBuilder.bind(emailQueue).to(emailExchange).with("email.routingkey");
     }
+
+    // USER
+    @Bean
+    public Queue userQueue() {
+        return new Queue("user.queue");
+    }
+
+    @Bean
+    public Binding userBinding(Queue userQueue, TopicExchange emailExchange) {
+        return BindingBuilder.bind(userQueue).to(emailExchange).with("user.routingkey");
+    }
 }

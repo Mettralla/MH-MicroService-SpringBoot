@@ -3,11 +3,13 @@ package com.mindhub.userMicroservice.services.impl;
 import com.mindhub.userMicroservice.dtos.EditUserEntity;
 import com.mindhub.userMicroservice.dtos.NewUserEntity;
 import com.mindhub.userMicroservice.dtos.UserEntityDTO;
+import com.mindhub.userMicroservice.events.RegisteredUser;
 import com.mindhub.userMicroservice.exceptions.EmailAlreadyExistsException;
 import com.mindhub.userMicroservice.exceptions.UserEntityNotFoundException;
 import com.mindhub.userMicroservice.models.RolType;
 import com.mindhub.userMicroservice.models.UserEntity;
 import com.mindhub.userMicroservice.repositories.UserEntityRepository;
+import com.mindhub.userMicroservice.services.RabbitMQProducer;
 import com.mindhub.userMicroservice.services.UserEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,9 @@ public class UserEntityServiceImpl implements UserEntityService {
 
     @Autowired
     private UserEntityRepository userEntityRepository;
+
+    @Autowired
+    private RabbitMQProducer rabbitMQProducer;
 
     @Override
     public List<UserEntityDTO> getAllUserEntities() {
@@ -50,6 +55,10 @@ public class UserEntityServiceImpl implements UserEntityService {
         );
 
         UserEntity createdUserEntity = userEntityRepository.save(userEntity);
+
+        RegisteredUser registredUser = new RegisteredUser(createdUserEntity.getUsername(), createdUserEntity.getEmail());
+        rabbitMQProducer.sendUserRegistredEvent(registredUser);
+
         return new UserEntityDTO(createdUserEntity);
     }
 
