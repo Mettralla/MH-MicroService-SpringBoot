@@ -12,8 +12,10 @@ import com.mindhub.orderMicroservice.repositories.OrderEntityRepository;
 import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
 import com.mindhub.orderMicroservice.services.RabbitMQProducer;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -32,6 +34,9 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     OrderEntityRepository orderRepository;
 
     private RestTemplate restTemplate;
+
+    @Autowired
+    private  RabbitTemplate rabbitTemplate;
 
     @Autowired
     private RabbitMQProducer rabbitMQProducer;
@@ -61,22 +66,22 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         List<OrderItemDTO> orderItemsDTO = createdOrder.getProducts()
                 .stream()
                 .map(orderItem -> {
-                    Map<String, Object> productData = orderItemService.getProductEntity(orderItem.getProductId());
+                    ProductEntityEvent productData = orderItemService.getProductEntity(orderItem.getProductId());
                     ProductEntityData productEntityData = new ProductEntityData(
-                            ((Integer) productData.get("id")),
-                            ((String) productData.get("name")),
-                            ((String) productData.get("description")),
-                            ((Double) productData.get("price"))
+                            Math.toIntExact(productData.id()),
+                            productData.name(),
+                            productData.description(),
+                            productData.price()
                     );
                     return new OrderItemDTO(orderItem, productEntityData);
                 })
                 .toList();
 
-        OrderDTO createdOrderDTO = new OrderDTO(createdOrder, userEntityData, orderItemsDTO);
+//        OrderDTO createdOrderDTO = new OrderDTO(createdOrder, userEntityData, orderItemsDTO);
 
-        rabbitMQProducer.sendOrder(createdOrderDTO);
+//        rabbitMQProducer.sendOrder(createdOrderDTO);
 
-        return createdOrderDTO;
+        return new OrderDTO(createdOrder, userEntityData, orderItemsDTO);
     }
 
     @Override
@@ -90,12 +95,12 @@ public class OrderEntityServiceImpl implements OrderEntityService {
                                         List<OrderItemDTO> orderItemsDTO = order.getProducts()
                                                 .stream()
                                                 .map(orderItem -> {
-                                                    Map<String, Object> productData = orderItemService.getProductEntity(orderItem.getProductId());
+                                                    ProductEntityEvent productData = orderItemService.getProductEntity(orderItem.getProductId());
                                                     ProductEntityData productEntityData = new ProductEntityData(
-                                                            ((Integer) productData.get("id")),
-                                                            ((String) productData.get("name")),
-                                                            ((String) productData.get("description")),
-                                                            ((Double) productData.get("price"))
+                                                            Math.toIntExact(productData.id()),
+                                                            productData.name(),
+                                                            productData.description(),
+                                                            productData.price()
                                                     );
                                                     return new OrderItemDTO(orderItem, productEntityData);
                                                 })
@@ -124,12 +129,12 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         List<OrderItemDTO> orderItemsDTO = postUpdateOrder.getProducts()
                 .stream()
                 .map(orderItem -> {
-                    Map<String, Object> productData = orderItemService.getProductEntity(orderItem.getProductId());
+                    ProductEntityEvent productData = orderItemService.getProductEntity(orderItem.getProductId());
                     ProductEntityData productEntityData = new ProductEntityData(
-                            ((Integer) productData.get("id")),
-                            ((String) productData.get("name")),
-                            ((String) productData.get("description")),
-                            ((Double) productData.get("price"))
+                            Math.toIntExact(productData.id()),
+                            productData.name(),
+                            productData.description(),
+                            productData.price()
                     );
                     return new OrderItemDTO(orderItem, productEntityData);
                 })
@@ -148,12 +153,12 @@ public class OrderEntityServiceImpl implements OrderEntityService {
         List<OrderItemDTO> orderItemsDTO = orderEntity.getProducts()
                 .stream()
                 .map(orderItem -> {
-                    Map<String, Object> productData = orderItemService.getProductEntity(orderItem.getProductId());
+                    ProductEntityEvent productData = orderItemService.getProductEntity(orderItem.getProductId());
                     ProductEntityData productEntityData = new ProductEntityData(
-                            ((Integer) productData.get("id")),
-                            ((String) productData.get("name")),
-                            ((String) productData.get("description")),
-                            ((Double) productData.get("price"))
+                            Math.toIntExact(productData.id()),
+                            productData.name(),
+                            productData.description(),
+                            productData.price()
                     );
                     return new OrderItemDTO(orderItem, productEntityData);
                 })
@@ -173,31 +178,17 @@ public class OrderEntityServiceImpl implements OrderEntityService {
     // ============================== UTILS ===============================
 
     public UserEntityData getUserEntityData(Long userId) throws UserEntityNotFoundException {
-        String userServiceUrl = userServiceBaseUrl + "/" + userId;
-
         try {
-
-            ResponseEntity<Object> response = restTemplate.getForEntity(userServiceUrl, Object.class);
-
-
-            if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
+            String response = (String) rabbitTemplate.convertSendAndReceive("user.request.exchange", "user.request", userId);
+            if (response == null) {
                 throw new UserEntityNotFoundException("User with ID " + userId + " not found");
             }
 
-            @SuppressWarnings("unchecked")
-            Map<String, Object> responseDataMap = (Map<String, Object>) response.getBody();
-
-            Long id = ((Number) responseDataMap.get("id")).longValue();
-            String username = (String) responseDataMap.get("username");
-            String email = (String) responseDataMap.get("email");
-            String roles = (String) responseDataMap.get("roles");
-
-            return new UserEntityData(id, username, email, roles);
-//        } catch (HttpClientErrorException.NotFound e) {
-//            throw new UserEntityNotFoundException("User with ID " + userId + " not found");
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.readValue(response, UserEntityData.class);
 
         } catch (Exception e) {
-            throw new RuntimeException("Unexpected error connecting to UserService");
+            throw new RuntimeException("Unexpected error connecting to UserService", e);
         }
     }
 

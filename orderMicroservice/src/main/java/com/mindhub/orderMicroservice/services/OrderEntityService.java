@@ -8,6 +8,7 @@ import com.mindhub.orderMicroservice.dtos.UserEntityData;
 import com.mindhub.orderMicroservice.exceptions.OrderNotFoundException;
 import com.mindhub.orderMicroservice.exceptions.UserEntityNotFoundException;
 import com.mindhub.orderMicroservice.models.Status;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 

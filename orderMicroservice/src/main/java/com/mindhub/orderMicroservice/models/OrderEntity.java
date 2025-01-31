@@ -69,7 +69,6 @@ public class OrderEntity {
         return "Order{" +
                 "id=" + id +
                 ", userId=" + userId +
-                ", products=" + products +
                 ", status=" + status +
                 '}';
     }

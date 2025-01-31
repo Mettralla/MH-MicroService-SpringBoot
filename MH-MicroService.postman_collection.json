@@ -72,13 +72,13 @@
 					"response": []
 				},
 				{
-					"name": "NEW USER",
+					"name": "REGISTER USER",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"username\": \"nuevoUsuario\",\r\n  \"password\": \"newpass\",\r\n  \"email\": \"nuevoUsuario@example.com\"\r\n}",
+							"raw": "{\r\n  \"username\": \"nuevoUsuario\",\r\n  \"password\": \"newpass\",\r\n  \"email\": \"nuevoUsuarasios@example.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -241,7 +241,7 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/products/1/stock?stock=250",
+							"raw": "http://localhost:8080/api/products/1/stock?stock=300",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -256,7 +256,7 @@
 							"query": [
 								{
 									"key": "stock",
-									"value": "250"
+									"value": "300"
 								}
 							]
 						}
@@ -304,6 +304,38 @@
 								"api",
 								"orders",
 								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SEND ORDER",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkYW5pQGdtYWlsLmNvbSIsInJvbGUiOiIxIiwiaWF0IjoxNzM4MjkyMDA4LCJleHAiOjE3MzgyOTIwODh9.oKidkgEO-V18iksGFmIeh-DlnJ3nOrsuOENB51lwamo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/orders/3/send",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"orders",
+								"3",
+								"send"
 							]
 						}
 					},
@@ -374,7 +406,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/orders/2/new-item",
+							"raw": "http://localhost:8080/api/orders/3/new-item",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -383,7 +415,7 @@
 							"path": [
 								"api",
 								"orders",
-								"2",
+								"3",
 								"new-item"
 							]
 						}
@@ -415,6 +447,41 @@
 								"api",
 								"orders",
 								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"dani@gmail.com\",\r\n  \"password\": \"strongpass\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
 							]
 						}
 					},

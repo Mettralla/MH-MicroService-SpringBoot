@@ -3,6 +3,7 @@ package com.mindhub.orderMicroservice.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.orderMicroservice.dtos.OrderDTO;
+import com.mindhub.orderMicroservice.dtos.UserEntityData;
 import com.mindhub.orderMicroservice.events.OrderCreatedEvent;
 import com.mindhub.orderMicroservice.models.OrderEntity;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -57,5 +58,11 @@ public class RabbitMQProducer {
                 productOrderDTOs,
                 orderDTO.getStatus().toString()
         );
+    }
+
+    public UserEntityData requestUserData(Long userId) throws JsonProcessingException {
+        String response = (String) rabbitTemplate.convertSendAndReceive("user.request.exchange", "user.request", userId);
+
+        return objectMapper.readValue(response, UserEntityData.class);
     }
 }

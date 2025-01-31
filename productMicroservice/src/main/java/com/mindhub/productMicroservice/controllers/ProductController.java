@@ -1,5 +1,6 @@
 package com.mindhub.productMicroservice.controllers;
 
+import com.mindhub.productMicroservice.config.JwtUtils;
 import com.mindhub.productMicroservice.dtos.NewProduct;
 import com.mindhub.productMicroservice.dtos.ProductDTO;
 import com.mindhub.productMicroservice.exceptions.ProductNotFoundException;
@@ -21,6 +22,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private JwtUtils jwtUtil;
 
     @GetMapping()
     @Operation(summary = "Get All Products", description = "Retrieve all Products entities.")

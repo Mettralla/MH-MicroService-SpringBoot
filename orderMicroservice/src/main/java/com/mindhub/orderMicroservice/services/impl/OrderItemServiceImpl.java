@@ -1,6 +1,7 @@
 package com.mindhub.orderMicroservice.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mindhub.orderMicroservice.config.RestTemplateConfig;
 import com.mindhub.orderMicroservice.dtos.*;
 import com.mindhub.orderMicroservice.exceptions.InsufficientStockException;
@@ -14,6 +15,7 @@ import com.mindhub.orderMicroservice.repositories.OrderItemRepository;
 import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
 import com.mindhub.orderMicroservice.services.RabbitMQProducer;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -38,6 +40,12 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     private RestTemplate restTemplate;
 
+    @Autowired
+    private  RabbitTemplate rabbitTemplate;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @Value("${productservice.baseurl}")
     private String productServiceBaseUrl;
 
@@ -51,16 +59,16 @@ public class OrderItemServiceImpl implements OrderItemService {
         OrderEntity itemOwner = orderEntityRepository.findById(orderId)
                 .orElseThrow(() -> new OrderNotFoundException("Order Not Found"));
 
-        Map<String, Object> productData = getProductEntity(newOrderItem.productId());
+        ProductEntityEvent productData = getProductEntity(newOrderItem.productId());
 
         ProductEntityData productEntityData = new ProductEntityData(
-                ((Integer) productData.get("id")),
-                ((String) productData.get("name")),
-                ((String) productData.get("description")),
-                ((Double) productData.get("price"))
+                Math.toIntExact(productData.id()),
+                productData.name(),
+                productData.description(),
+                productData.price()
         );
 
-        int stock = ((Number) productData.get("stock")).intValue();
+        int stock = productData.stock();
 
         validateStock(newOrderItem, stock);
 
@@ -92,25 +100,41 @@ public class OrderItemServiceImpl implements OrderItemService {
         }
     }
 
-    public Map<String, Object> getProductEntity(Long productId) throws ProductNotFoundException {
-        String productServiceUrl = productServiceBaseUrl + "/" + productId;
+    public ProductEntityEvent getProductEntity(Long productId) throws ProductNotFoundException {
+        try {
+            String response = (String) rabbitTemplate.convertSendAndReceive("product.request.exchange", "product.request", productId);
 
-        ResponseEntity<Object> response = restTemplate.getForEntity(productServiceUrl, Object.class);
-        if (!response.getStatusCode().is2xxSuccessful() || response.getBody() == null) {
-            throw new ProductNotFoundException("Product with ID " + productId + " not found");
+            if (response == null) {
+                throw new ProductNotFoundException("Product with ID " + productId + " not found");
+            }
+
+            return objectMapper.readValue(response, ProductEntityEvent.class);
+        } catch (Exception e) {
+            throw new RuntimeException("Unexpected error connecting to ProductService: " + e.getMessage());
         }
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> productData = (Map<String, Object>) response.getBody();
-        return productData;
     }
 
     public void updateProductStock(Long productId, int updatedStock) {
-        String patchStockUrl = productServiceBaseUrl + "/" + productId + "/stock?stock=" + updatedStock;
         try {
-            restTemplate.put(patchStockUrl, null);
+            StockUpdateData stockUpdateData = new StockUpdateData(productId, updatedStock);
+
+            String jsonPayload = objectMapper.writeValueAsString(stockUpdateData);
+
+            String response = (String) rabbitTemplate.convertSendAndReceive(
+                    "product.request.exchange",
+                    "product.stock.routingkey",
+                    jsonPayload
+            );
+
+
+            if (response == null) {
+                throw new RuntimeException("Failed to update stock for product ID " + productId);
+            }
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error converting stock update data to JSON: " + e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to update stock for product ID " + productId + ": " + e.getMessage());
+            throw new RuntimeException("Unexpected error updating stock for product ID " + productId + ": " + e.getMessage());
         }
     }
 }

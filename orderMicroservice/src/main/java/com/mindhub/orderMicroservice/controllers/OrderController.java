@@ -2,6 +2,7 @@ package com.mindhub.orderMicroservice.controllers;
 
 import com.mindhub.orderMicroservice.dtos.*;
 import com.mindhub.orderMicroservice.exceptions.OrderNotFoundException;
+import com.mindhub.orderMicroservice.models.Status;
 import com.mindhub.orderMicroservice.services.OrderEntityService;
 import com.mindhub.orderMicroservice.services.OrderItemService;
 import com.mindhub.orderMicroservice.services.RabbitMQProducer;
@@ -46,6 +47,19 @@ public class OrderController {
         try {
             OrderDTO foundOrder = orderEntityService.showOrder(id);
             return new ResponseEntity<>(foundOrder, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PatchMapping("/{id}/send")
+    @Operation(summary = "Send Order Completed", description = "Send Email with the Order Completed.")
+    public ResponseEntity<Object> completeOrder(@PathVariable Long id) {
+        try {
+            NewOrderStatus completedStatus = new NewOrderStatus(Status.COMPLETED);
+            OrderDTO orderWithItems = orderEntityService.updateOrderStatus(id, completedStatus);
+            rabbitMQProducer.sendOrder(orderWithItems);
+            return new ResponseEntity<>(orderWithItems, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -98,8 +112,8 @@ public class OrderController {
     ) {
         try {
             OrderItemDTO createdOrderItem = orderItemService.createOrderItem(newOrderItemData, id);
-            OrderDTO orderWithItems = orderEntityService.showOrder(id);
-            rabbitMQProducer.sendOrder(orderWithItems);
+//            OrderDTO orderWithItems = orderEntityService.showOrder(id);
+//            rabbitMQProducer.sendOrder(orderWithItems);
             return new ResponseEntity<>(createdOrderItem, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.BAD_REQUEST);

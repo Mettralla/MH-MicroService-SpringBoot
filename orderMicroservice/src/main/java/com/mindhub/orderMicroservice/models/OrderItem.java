@@ -58,7 +58,6 @@ public class OrderItem {
                 "id=" + id +
                 ", productId=" + productId +
                 ", quantity=" + quantity +
-                ", order=" + order +
                 '}';
     }
 }
